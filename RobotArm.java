@@ -12,21 +12,26 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+//import java.util.HashMap;
+
 
 public class RobotArm {
     //hardware map
     private HardwareMap hwMap;
-    private  double basePos;
-    private  double armPos;
-    private  double elbowPos;
-    private  double clawPos;
+    private double basePos;
+    private double armPos;
+    private double elbowPos;
+    private double clawPos;
     
+    private final double SPEED = 0.01;
+    
+    //private HashMap<String, Double>
     
     //arm servos
-    public  CRServo baseServo;
-    public  Servo armServo;
-    public  Servo elbowServo;
-    public  Servo clawServo;
+    public CRServo baseServo;
+    public Servo armServo;
+    public Servo elbowServo;
+    public Servo clawServo;
     
     public RobotArm(){
         //constructor
@@ -56,29 +61,28 @@ public class RobotArm {
         elbowServo.setPosition(elbowPos);
     }
     
-    public  void moveBase(int direction){
+    public void moveBase(int direction){
         baseServo.setPower(direction);
     }
+    
+//     public void moveServo(String servo, int direction) {
+//         servo = hwMap.servo.get(servo);
+        
+//     }
 
-    public  void moveArm(int direction){
-        if (0<(armPos+(0.01*direction)) && (armPos+(0.01*direction))<1){
-            armPos+=0.01*direction;
-            armServo.setPosition(armPos);
-        }
+    public void moveArm(int direction){
+        armPos = Math.min( Math.max(0 , SPEED*direction), 1);
+        armServo.setPosition(armPos);
     } 
     
-    public  void moveElbow(int direction){
-        if (0<(elbowPos+(0.01*direction)) && (elbowPos+(0.01*direction))<1){
-            elbowPos+=0.01*direction;
-            elbowServo.setPosition(elbowPos);
-        }
+    public void moveElbow(int direction){
+        elbowPos = Math.min( Math.max(0 , SPEED*direction), 1);
+        elbowServo.setPosition(elbowPos);
     }
     
-    public  void moveClaw(int direction){
-        if (0<(clawPos+(0.01*direction)) && (clawPos+(0.01*direction))<1){
-            clawPos+=0.01*direction;
-            clawServo.setPosition(clawPos); 
-        }
+    public void moveClaw(int direction){
+        clawPos = Math.min( Math.max(0 , SPEED*direction), 1);
+        clawServo.setPosition(clawPos);
     }
 
 }

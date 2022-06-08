@@ -33,37 +33,50 @@ public class CoolClaw extends LinearOpMode {
         arm.initClaw();
 
         // run until the end of the match (driver presses STOP)
+        
+        boolean[] inputs = new boolean[];
+        
+        final int ARM;
+        
+        static final long startTime = System.nanoTime();
+        long lastTime = startTime;
+        long loopPause = 50;
         while (opModeIsActive()) {
-
-            boolean armUp = gamepad1.x;
-            boolean armDown = gamepad1.b;
-            boolean openClaw = gamepad1.y;
-            boolean closeClaw = gamepad1.a;
             
-            double elbow = gamepad1.right_stick_y;
-            double arm1 = gamepad1.left_stick_y;
-            double base = gamepad1.left_stick_x;
+            long now = System.nanoTime()
+            long dt = now-lastTime;
             
-            telemetry.addData("leftX ", armDown);
-            telemetry.addData("rightX ", armUp);
-            telemetry.addData("openClaw ", openClaw);
-            telemetry.addData("closeClaw ", closeClaw);
-            telemetry.addData("elbow ", elbow);
-            telemetry.update();
+            if (dt >= loopPause) {
+                lastTime = now;            
+                
+                boolean armUp = gamepad1.x;
+                boolean armDown = gamepad1.b;
+                boolean openClaw = gamepad1.y;
+                boolean closeClaw = gamepad1.a;
 
-            if(openClaw){
-                arm.moveClaw(3);
+                double elbow = gamepad1.right_stick_y;
+                double arm1 = gamepad1.left_stick_y;
+                double base = gamepad1.left_stick_x;
+
+                telemetry.addData("leftX ", armDown);
+                telemetry.addData("rightX ", armUp);
+                telemetry.addData("openClaw ", openClaw);
+                telemetry.addData("closeClaw ", closeClaw);
+                telemetry.addData("elbow ", elbow);
+                telemetry.update();
+
+                if(openClaw){
+                    arm.moveClaw(3);
+                }
+                if(closeClaw){
+                    arm.moveClaw(-3);
+                }
+
+                arm.moveArm((int)(arm1*5));
+                arm.moveElbow((int)(elbow*5));
+                arm.moveBase((int)(base*5));
+                
             }
-            if(closeClaw){
-                arm.moveClaw(-3);
-            }
-            
-            arm.moveArm((int)(arm1*5));
-            arm.moveElbow((int)(elbow*5));
-            arm.moveBase((int)(base*5));
-
-            // Pace this loop so stuff is reasonable speed *thumbs up emoji*
-            sleep(50);
         }
     }
 }

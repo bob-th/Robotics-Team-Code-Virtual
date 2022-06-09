@@ -40,7 +40,7 @@ public class CoolClaw extends LinearOpMode {
         
         static final long startTime = System.nanoTime();
         long lastTime = startTime;
-        long loopPause = 50;
+        long loopPause = 50000;
         while (opModeIsActive()) {
             
             long now = System.nanoTime()
